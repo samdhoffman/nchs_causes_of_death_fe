@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DataTable from './components/DataTable';
 
 function App() {
   // Cause of death data set from api
@@ -40,7 +41,7 @@ function App() {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <h1>hi</h1>
+        <DataTable causeOfDeathData={causeOfDeathData} />
       )}
     </div>
   );
