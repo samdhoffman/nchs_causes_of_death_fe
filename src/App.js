@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DataTable from './components/DataTable';
+import StateSelect from './components/StateSelect';
 
 function App() {
   // Cause of death data set from api
@@ -63,8 +64,26 @@ function App() {
     }
   };
 
+  // Get filtered data from api
+  const filterData = async (queryString) => {
+    setIsError(false);
+    setIsLoading(true);
+
+    try {
+      const result = await axios.get(`/causes-of-death?${queryString}`); // get data from our api
+      setTimeout(() => { // Using set timeout to allow the display of the loading indicator to give feedback to the user
+        setCauseOfDeathData(result.data);
+        setIsLoading(false);
+      }, 1000)
+    } catch (error) {
+      setIsError(true);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="App">
+      <StateSelect filterData={filterData} fetchData={fetchData}/>
       {isError && <div>Something went wrong ...</div>}
 
       {isLoading ? (
