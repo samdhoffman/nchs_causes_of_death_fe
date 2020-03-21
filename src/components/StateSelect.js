@@ -26,7 +26,7 @@ export default function StateSelect({ filterData, fetchData }) {
       {/* We will use states defined in our filterConstants.js file */}
       <Autocomplete
         id="state-select"
-        style={{ width: 300 }}
+        style={{ width: 300, margin: 20 }}
         options={STATES}
         autoHighlight
         autoComplete={true}
