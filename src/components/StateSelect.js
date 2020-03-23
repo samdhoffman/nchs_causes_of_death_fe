@@ -3,19 +3,19 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { STATES } from '../constants/filterConstants';
 
-export default function StateSelect({ filterData, fetchData }) {
+export default function StateSelect({ handleFilterQueryChange }) {
   const [value, setValue] = useState(null);
 
   const handleFilter = (event, newValue) => {
-    if (value == newValue) return;
+    if (value === newValue) return;
 
     if (newValue) {
       // Create query string in the format needed for api to filter data
       // Will use this query string in our request e.g. ?State=Alabama
       let queryString = `State=${newValue}`;
-      filterData(queryString);
+      handleFilterQueryChange(queryString);
     } else {
-      fetchData();
+      handleFilterQueryChange("")
     }
     
     setValue(newValue);
@@ -23,7 +23,7 @@ export default function StateSelect({ filterData, fetchData }) {
 
   return (
     <div>
-      {/* We will use states defined in our filterConstants.js file */}
+      {/* States are defined in our filterConstants.js file */}
       <Autocomplete
         id="state-select"
         style={{ width: 300, margin: 20 }}

@@ -19,6 +19,7 @@ function App() {
     "Age-adjusted Death Rate": "asc"
   });
   const [sortQuery, setSortQuery] = useState("")
+  const [filterQuery, setFilterQuery] = useState("")
 
   // Loading & Errors
   const [isLoading, setIsLoading] = useState(false); // used for loading indicator
@@ -26,7 +27,7 @@ function App() {
 
   useEffect(() => {
     fetchData(); // Get data on page load
-  }, [sortQuery]);
+  }, [sortQuery, filterQuery]);
 
   // Use this method to load our data from the api
   const fetchData = async () => {
@@ -50,8 +51,13 @@ function App() {
 
   const buildUrl = () => {
     let baseApiUrl = "/causes-of-death";
-    if (sortQuery.length > 0) {
+
+    if (sortQuery.length > 0 && filterQuery.length > 0) {
+      return baseApiUrl + "?sort=" + sortQuery + "&" + filterQuery;
+    } else if (sortQuery.length > 0) {
       return baseApiUrl + "?sort=" + sortQuery;
+    } else if (filterQuery.length > 0) {
+      return baseApiUrl + "?" + filterQuery;
     } else {
       return baseApiUrl;
     }
@@ -62,26 +68,13 @@ function App() {
     setSortValues(newSortValues);
   }
 
-  // Get filtered data from api
-  const filterData = async (queryString) => {
-    setIsError(false);
-    setIsLoading(true);
-
-    try {
-      const result = await axios.get(`/causes-of-death?${queryString}`); // get data from our api
-      setTimeout(() => { // Using set timeout to allow the display of the loading indicator to give feedback to the user
-        setCauseOfDeathData(result.data);
-        setIsLoading(false);
-      }, 1000)
-    } catch (error) {
-      setIsError(true);
-      setIsLoading(false);
-    }
-  };
+  const handleFilterQueryChange = (newQuery) => {
+    setFilterQuery(newQuery);
+  }
 
   return (
     <div className="App">
-      <StateSelect filterData={filterData} fetchData={fetchData}/>
+      <StateSelect handleFilterQueryChange={handleFilterQueryChange}/>
       {isError && <div>Something went wrong ...</div>}
 
       {isLoading ? (
