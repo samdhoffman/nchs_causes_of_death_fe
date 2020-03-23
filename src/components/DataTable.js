@@ -15,33 +15,50 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function DataTable({ causeOfDeathData, columns, sortData, sortValues }) {
+export default function DataTable({ causeOfDeathData, columns, sortValues, curSortQuery, handleSortQueryChange }) {
   const classes = useStyles();
 
   const handleSort = (column, direction) => {
     // Reverse sort direction
     let newDir = direction === "asc" ? "desc" : "asc";
+    
+    // Keep track of old query for this column, e.g. a_State
+    let oldColQuery = `${sortValues[column][0]}_${column}`;
+
     let sortValuesCopy = {...sortValues};
     sortValuesCopy[column] = newDir;
 
     // Create query string in the format needed for api to sort data
     // Will use this query string in our request as ?sort=queryString
-    let queryString = buildQueryString(sortValuesCopy)
+    let queryString = buildSortQuery(column, sortValuesCopy, oldColQuery)
 
-    // We will pass updated sortValues to method so state can be updated in parent -- Lifting State Up Pattern
-    sortData(sortValuesCopy, queryString)
+    // We will pass updated queryString and sortValues to method so state can be updated in parent -- Lifting State Up Pattern
+    handleSortQueryChange(queryString, sortValuesCopy)
   }
 
-  const buildQueryString = (sortValues) => {
-    let sortValsArr = [];
+  // This function is building the entire sort query string across all columns
+  const buildSortQuery = (column, curSortValues, oldColQuery) => {
+    // Create an array from the current sort values which will give us the order needed for correct sorting
+    let orderedSortOpts = curSortQuery.length > 0 ? curSortQuery.split(",") : [];
     let queryString = "";
 
-    for (let [key, value] of Object.entries(sortValues)) {
-      let curQuery = `${value[0]}_${key}`;
-      sortValsArr.push(curQuery)
+    if (orderedSortOpts.length > 0) {
+      // Remove the old query string from the array
+      let oldIndex = orderedSortOpts.indexOf(oldColQuery);
+      orderedSortOpts.splice(oldIndex, 1);
+    } else {
+      for (let [key, value] of Object.entries(curSortValues)) {
+        if (key === column) continue;
+        let curQuery = `${value[0]}_${key}`;
+        orderedSortOpts.push(curQuery)
+      }
     }
 
-    queryString = sortValsArr.join(",");
+    let newQuery = `${curSortValues[column][0]}_${column}`;
+    // Add most recently selected sort option to the front of the array
+    orderedSortOpts.unshift(newQuery);
+    
+    queryString = orderedSortOpts.join(",");
     return queryString;
   }
 

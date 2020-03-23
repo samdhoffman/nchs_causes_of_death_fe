@@ -18,6 +18,7 @@ function App() {
     "Deaths": "asc",
     "Age-adjusted Death Rate": "asc"
   });
+  const [sortQuery, setSortQuery] = useState("")
 
   // Loading & Errors
   const [isLoading, setIsLoading] = useState(false); // used for loading indicator
@@ -25,15 +26,17 @@ function App() {
 
   useEffect(() => {
     fetchData(); // Get data on page load
-  }, []);
+  }, [sortQuery]);
 
   // Use this method to load our data from the api
   const fetchData = async () => {
     setIsError(false);
     setIsLoading(true);
 
+    let url = buildUrl();
+
     try {
-      const result = await axios.get("/causes-of-death"); // get data from our api
+      const result = await axios.get(url); // get data from our api
       setTimeout(() => { // Using set timeout to allow the display of the loading indicator to give feedback to the user
         columns.length === 0 && setColumns(result.data.columns);
         setCauseOfDeathData(result.data);
@@ -45,24 +48,19 @@ function App() {
     }
   };
 
-  // Get sorted data from api
-  const sortData = async (newSortValues, queryString) => {
-    setIsError(false);
-    setIsLoading(true);
-
-    setSortValues(newSortValues);
-
-    try {
-      const result = await axios.get(`/causes-of-death?sort=${queryString}`); // get data from our api
-      setTimeout(() => { // Using set timeout to allow the display of the loading indicator to give feedback to the user
-        setCauseOfDeathData(result.data);
-        setIsLoading(false);
-      }, 1000)
-    } catch (error) {
-      setIsError(true);
-      setIsLoading(false);
+  const buildUrl = () => {
+    let baseApiUrl = "/causes-of-death";
+    if (sortQuery.length > 0) {
+      return baseApiUrl + "?sort=" + sortQuery;
+    } else {
+      return baseApiUrl;
     }
-  };
+  }
+
+  const handleSortQueryChange = (newQuery, newSortValues) => {
+    setSortQuery(newQuery);
+    setSortValues(newSortValues);
+  }
 
   // Get filtered data from api
   const filterData = async (queryString) => {
@@ -92,8 +90,9 @@ function App() {
         <DataTable 
           causeOfDeathData={causeOfDeathData} 
           columns={columns}
-          sortData={sortData} 
-          sortValues={sortValues}
+          sortValues={sortValues} 
+          curSortQuery={sortQuery}
+          handleSortQueryChange={handleSortQueryChange}
         />
       )}
     </div>
