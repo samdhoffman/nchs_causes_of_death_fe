@@ -18,6 +18,13 @@ const useStyles = makeStyles(theme => ({
     width: "90%",
     margin: "0 auto",
   },
+  pagination: {
+    margin: 20,
+
+    "& ul": {
+      justifyContent: 'center',
+    }
+  },
 }));
 
 function App() {

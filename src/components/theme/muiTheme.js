@@ -27,6 +27,14 @@ const theme = createMuiTheme({
         color: "#003d71"
       }
     },
+    MuiPaginationItem: {
+      page: {
+        color: "#003d71",
+        "&:hover": {
+          color: "#f8981d"
+        }
+      }
+    }
   },
 });
 
