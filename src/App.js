@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 
+import Layout from './components/layout/Layout';
 import DataTable from './components/DataTable';
 import FilterDropdown from './components/FilterDropdown';
 
@@ -100,31 +101,33 @@ function App() {
 
   return (
     <div className="App">
+      <Layout>
       {/* State Dropdown */}
-      <FilterDropdown
-        handleFilterQueryChange={handleFilterQueryChange}
-        filterName={"State"}
-        valueOpts={STATES}
-        label={"Select State or United States"}
-      />
-      {/* Cause Dropdown */}
-      <FilterDropdown 
-        handleFilterQueryChange={handleFilterQueryChange}
-        filterName={"Cause Name"}
-        valueOpts={CAUSES}
-        label={"Select Cause Name"}
-      />
+        <FilterDropdown
+          handleFilterQueryChange={handleFilterQueryChange}
+          filterName={"State"}
+          valueOpts={STATES}
+          label={"Select State or United States"}
+        />
+        {/* Cause Dropdown */}
+        <FilterDropdown 
+          handleFilterQueryChange={handleFilterQueryChange}
+          filterName={"Cause Name"}
+          valueOpts={CAUSES}
+          label={"Select Cause Name"}
+        />
 
-      {isError && <div>Something went wrong ...</div>}
-      
-      <DataTable 
-        causeOfDeathData={causeOfDeathData} 
-        columns={columns}
-        sortValues={sortValues} 
-        curSortQuery={sortQuery}
-        handleSortQueryChange={handleSortQueryChange}
-        isLoading={isLoading}
-      />
+        {isError && <div>Something went wrong ...</div>}
+        
+        <DataTable 
+          causeOfDeathData={causeOfDeathData} 
+          columns={columns}
+          sortValues={sortValues} 
+          curSortQuery={sortQuery}
+          handleSortQueryChange={handleSortQueryChange}
+          isLoading={isLoading}
+        />
+      </Layout>
     </div>
   );
 }
