@@ -11,6 +11,7 @@ import FilterDropdown from './components/FilterDropdown';
 
 import { STATES } from './constants/filterConstants';
 import { CAUSES } from './constants/filterConstants';
+import ErrorPage from './components/ErrorPage';
 
 const useStyles = makeStyles(theme => ({
   dropdownSection: {
@@ -52,6 +53,7 @@ function App() {
   // Loading & Errors
   const [isLoading, setIsLoading] = useState(false); // used for loading indicator
   const [isError, setIsError] = useState(false);
+  const [errorResponse, setErrorResponse] = useState({});
 
   useEffect(() => {
     fetchData(); // Get data on page load
@@ -74,6 +76,7 @@ function App() {
         setIsLoading(false);
       }, 1000)
     } catch (error) {
+      setErrorResponse(error.response)
       setIsError(true);
       setIsLoading(false);
     }
@@ -156,7 +159,7 @@ function App() {
           />
         </Grid>
 
-        {isError && <div>Something went wrong ...</div>}
+        {isError && <ErrorPage errorResponse={errorResponse} />}
         
         <DataTable 
           causeOfDeathData={causeOfDeathData} 
