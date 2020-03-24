@@ -4,8 +4,10 @@ import axios from 'axios';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DataTable from './components/DataTable';
-import StateSelect from './components/StateSelect';
-import CauseSelect from './components/CauseSelect';
+import FilterDropdown from './components/FilterDropdown';
+
+import { STATES } from './constants/filterConstants';
+import { CAUSES } from './constants/filterConstants';
 
 function App() {
   // Cause of death data set from api
@@ -99,8 +101,21 @@ function App() {
 
   return (
     <div className="App">
-      <StateSelect handleFilterQueryChange={handleFilterQueryChange}/>
-      <CauseSelect handleFilterQueryChange={handleFilterQueryChange}/>
+      {/* State Dropdown */}
+      <FilterDropdown
+        handleFilterQueryChange={handleFilterQueryChange}
+        filterName={"State"}
+        valueOpts={STATES}
+        label={"Select State or United States"}
+      />
+      {/* Cause Dropdown */}
+      <FilterDropdown 
+        handleFilterQueryChange={handleFilterQueryChange}
+        filterName={"Cause Name"}
+        valueOpts={CAUSES}
+        label={"Select Cause Name"}
+      />
+
       {isError && <div>Something went wrong ...</div>}
 
       {isLoading ? (

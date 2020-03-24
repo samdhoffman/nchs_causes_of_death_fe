@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { STATES } from '../constants/filterConstants';
 
-export default function StateSelect({ handleFilterQueryChange }) {
+export default function FilterDropdown({ handleFilterQueryChange, filterName, valueOpts, label }) {
   const [value, setValue] = useState(null);
 
   const handleFilter = (event, newValue) => {
@@ -11,9 +11,9 @@ export default function StateSelect({ handleFilterQueryChange }) {
 
     if (newValue) {
       // Will use newValue in the query string for filtering
-      handleFilterQueryChange(newValue, "State");
+      handleFilterQueryChange(newValue, filterName);
     } else {
-      handleFilterQueryChange("", "State")
+      handleFilterQueryChange("", filterName)
     }
     
     setValue(newValue);
@@ -25,11 +25,11 @@ export default function StateSelect({ handleFilterQueryChange }) {
       <Autocomplete
         id="state-select"
         style={{ width: 300, margin: 20 }}
-        options={STATES}
+        options={valueOpts}
         autoHighlight
         autoComplete={true}
         getOptionLabel={option => option}
-        renderInput={params => <TextField {...params} label="Select State or United States" variant="outlined" />}
+        renderInput={params => <TextField {...params} label={label} variant="outlined" />}
         onChange={(e, newValue) => handleFilter(e, newValue)}
       />
     </div>
