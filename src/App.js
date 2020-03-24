@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
 import axios from 'axios';
 
@@ -9,7 +10,17 @@ import FilterDropdown from './components/FilterDropdown';
 import { STATES } from './constants/filterConstants';
 import { CAUSES } from './constants/filterConstants';
 
+const useStyles = makeStyles(theme => ({
+  dropdownSection: {
+    display: 'flex',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
 function App() {
+  const classes = useStyles();
+
   // Cause of death data set from api
   const [causeOfDeathData, setCauseOfDeathData] = useState({});
   const [columns, setColumns] = useState([]);
@@ -102,20 +113,24 @@ function App() {
   return (
     <div className="App">
       <Layout>
-      {/* State Dropdown */}
-        <FilterDropdown
-          handleFilterQueryChange={handleFilterQueryChange}
-          filterName={"State"}
-          valueOpts={STATES}
-          label={"Select State or United States"}
-        />
-        {/* Cause Dropdown */}
-        <FilterDropdown 
-          handleFilterQueryChange={handleFilterQueryChange}
-          filterName={"Cause Name"}
-          valueOpts={CAUSES}
-          label={"Select Cause Name"}
-        />
+        <section className={classes.dropdownSection}>
+          {/* State Dropdown */}
+          <FilterDropdown
+            handleFilterQueryChange={handleFilterQueryChange}
+            filterName={"State"}
+            valueOpts={STATES}
+            elementId={"state-select"}
+            label={"Select State or United States"}
+          />
+          {/* Cause Dropdown */}
+          <FilterDropdown 
+            handleFilterQueryChange={handleFilterQueryChange}
+            filterName={"Cause Name"}
+            valueOpts={CAUSES}
+            elementId={"cause-select"}
+            label={"Select Cause Name"}
+          />
+        </section>
 
         {isError && <div>Something went wrong ...</div>}
         

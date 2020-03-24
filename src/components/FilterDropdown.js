@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { STATES } from '../constants/filterConstants';
 
-export default function FilterDropdown({ handleFilterQueryChange, filterName, valueOpts, label }) {
+export default function FilterDropdown({ handleFilterQueryChange, filterName, valueOpts, elementId, label }) {
   const [value, setValue] = useState(null);
 
   const handleFilter = (event, newValue) => {
@@ -22,8 +21,9 @@ export default function FilterDropdown({ handleFilterQueryChange, filterName, va
   return (
     <div>
       {/* States are defined in our filterConstants.js file */}
+      {/* TODO add disabled prop */}
       <Autocomplete
-        id="state-select"
+        id={elementId}
         style={{ width: 300, margin: 20 }}
         options={valueOpts}
         autoHighlight
