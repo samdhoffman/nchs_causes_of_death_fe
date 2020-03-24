@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Pagination from '@material-ui/lab/Pagination';
 import './App.css';
 import axios from 'axios';
 
@@ -37,13 +38,17 @@ function App() {
   const [filterQuery, setFilterQuery] = useState("")
   const [filterQueryDict, setFilterQueryDict] = useState({})
 
+  // Pagination
+  const [pages, setPages] = useState(0);
+  const [curPage, setCurPage] = useState(0);
+
   // Loading & Errors
   const [isLoading, setIsLoading] = useState(false); // used for loading indicator
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchData(); // Get data on page load
-  }, [sortQuery, filterQuery]);
+  }, [curPage, sortQuery, filterQuery]);
 
   // Use this method to load our data from the api
   const fetchData = async () => {
@@ -55,8 +60,10 @@ function App() {
     try {
       const result = await axios.get(url); // get data from our api
       setTimeout(() => { // Using set timeout to allow the display of the loading indicator to give feedback to the user
-        columns.length === 0 && setColumns(result.data.columns);
-        setCauseOfDeathData(result.data);
+        let data = JSON.parse(result.data.records);
+        columns.length === 0 && setColumns(data.columns);
+        setCauseOfDeathData(data);
+        setPages(result.data.pages);
         setIsLoading(false);
       }, 1000)
     } catch (error) {
@@ -66,14 +73,14 @@ function App() {
   };
 
   const buildUrl = () => {
-    let baseApiUrl = "/causes-of-death";
+    let baseApiUrl = `/causes-of-death?page=${curPage}`;
 
     if (sortQuery.length > 0 && filterQuery.length > 0) {
-      return baseApiUrl + "?sort=" + sortQuery + "&" + filterQuery;
+      return baseApiUrl + "&sort=" + sortQuery + "&" + filterQuery;
     } else if (sortQuery.length > 0) {
-      return baseApiUrl + "?sort=" + sortQuery;
+      return baseApiUrl + "&sort=" + sortQuery;
     } else if (filterQuery.length > 0) {
-      return baseApiUrl + "?" + filterQuery;
+      return baseApiUrl + "&" + filterQuery;
     } else {
       return baseApiUrl;
     }
@@ -82,6 +89,7 @@ function App() {
   const handleSortQueryChange = (newQuery, newSortValues) => {
     setSortQuery(newQuery);
     setSortValues(newSortValues);
+    setCurPage(0);
   }
 
   const handleFilterQueryChange = (newQuery, filterKey) => {
@@ -97,7 +105,7 @@ function App() {
     setFilterQueryDict(filterQueryDictCopy);
 
     // Using a copy of the filterQueryDict as state updates can be asynchronous
-    if (Object.keys(filterQueryDictCopy).length == 0) {
+    if (Object.keys(filterQueryDictCopy).length === 0) {
       setFilterQuery("");
     } else {
       let queries = [];
@@ -109,6 +117,14 @@ function App() {
       let queryString = queries.join("&");
       setFilterQuery(queryString);
     }
+
+    setCurPage(0);
+  }
+
+  // When user changes page this will set a new current page and make a GET request for the next page of data
+  // Subtract 1 to account for backend data that is 0 indexed
+  const handlePageChange = (event, value) => {
+    setCurPage(value - 1);
   }
 
   return (
@@ -143,6 +159,9 @@ function App() {
           handleSortQueryChange={handleSortQueryChange}
           isLoading={isLoading}
         />
+
+        {/* Add 1 to page prop to account for backend data that is 0 indexed */}
+        <Pagination className={classes.pagination} count={pages} page={curPage + 1} onChange={handlePageChange} disabled={isError} />
       </Layout>
     </div>
   );
