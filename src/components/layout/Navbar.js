@@ -46,7 +46,7 @@ const Navbar = () => {
       <AppBar position="static" color="inherit" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link href="/" color="inherit" underline="none">NCHS Causes of Death Data</Link>
+            <Link href="/" color="inherit" underline="none">United States Leading Causes of Death</Link>
           </Typography>
 
           <Tooltip title="View The Codebase">
