@@ -11,6 +11,10 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    width: "90%",
+    margin: "0 auto 20px",
+  },
   table: {
     minHeight: 600,
     minWidth: 750,
@@ -65,58 +69,56 @@ export default function DataTable({ causeOfDeathData, columns, sortValues, curSo
   }
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="data table">
+    <TableContainer component={Paper} className={classes.root}>
+      <Table className={classes.table} aria-label="data table">
 
-          <TableHead>
+        <TableHead>
+          <TableRow>
+          {columns && columns.map((col) => (
+            <TableCell align="right" key={col}>
+              <TableSortLabel
+                active={true}
+                direction={sortValues[col]}
+                onClick={() => handleSort(col, sortValues[col])}
+                style={{color: "#003d71"}}
+              >
+                {col}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+          </TableRow>
+        </TableHead>
+
+        {isLoading ? (
+          <TableBody>
             <TableRow>
-            {columns && columns.map((col) => (
-              <TableCell align="right" key={col}>
-                <TableSortLabel
-                  active={true}
-                  direction={sortValues[col]}
-                  onClick={() => handleSort(col, sortValues[col])}
-                  style={{color: "#003d71"}}
-                >
-                  {col}
-                </TableSortLabel>
+              <TableCell align="center" colSpan={12}>
+                <CircularProgress />
               </TableCell>
-            ))}
             </TableRow>
-          </TableHead>
-
-          {isLoading ? (
-            <TableBody>
-              <TableRow>
-                <TableCell align="center" colSpan={12}>
-                  <CircularProgress />
-                </TableCell>
+          </TableBody>
+        ) : (
+          <TableBody>
+            {causeOfDeathData.data && causeOfDeathData.data.map((rowData, index) => (
+              <TableRow name={index} key={index}>
+                {rowData.map((cellData, i) => (
+                  // For accessibility, the first column is set to be a <th> element, with a scope of "row". 
+                  // This enables screen readers to identify a cell's value by it's row and column name.
+                  <TableCell 
+                    component={i === 0 ? "th" : ""} 
+                    scope={i === 0 ? "row" : ""} 
+                    align="right"
+                    key={cellData}
+                  >
+                    {cellData}
+                  </TableCell>
+                ))}
               </TableRow>
-            </TableBody>
-          ) : (
-            <TableBody>
-              {causeOfDeathData.data && causeOfDeathData.data.map((rowData, index) => (
-                <TableRow name={index} key={index}>
-                  {rowData.map((cellData, i) => (
-                    // For accessibility, the first column is set to be a <th> element, with a scope of "row". 
-                    // This enables screen readers to identify a cell's value by it's row and column name.
-                    <TableCell 
-                      component={i === 0 ? "th" : ""} 
-                      scope={i === 0 ? "row" : ""} 
-                      align="right"
-                      key={cellData}
-                    >
-                      {cellData}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          )}
+            ))}
+          </TableBody>
+        )}
 
-        </Table>
-      </TableContainer>
-    </div>
+      </Table>
+    </TableContainer>
   )
 }

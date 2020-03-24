@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import './App.css';
 import axios from 'axios';
 
@@ -12,9 +13,9 @@ import { CAUSES } from './constants/filterConstants';
 
 const useStyles = makeStyles(theme => ({
   dropdownSection: {
-    display: 'flex',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
+    width: "90%",
+    margin: "0 auto",
   },
 }));
 
@@ -113,7 +114,7 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        <section className={classes.dropdownSection}>
+        <Grid container spacing={2} alignItems="center" className={classes.dropdownSection}>
           {/* State Dropdown */}
           <FilterDropdown
             handleFilterQueryChange={handleFilterQueryChange}
@@ -130,7 +131,7 @@ function App() {
             elementId={"cause-select"}
             label={"Select Cause Name"}
           />
-        </section>
+        </Grid>
 
         {isError && <div>Something went wrong ...</div>}
         
