@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FilterDropdown({ handleFilterQueryChange, filterName, valueOpts, elementId, label }) {
+export default function FilterDropdown({ handleFilterQueryChange, filterName, valueOpts, elementId, label, isDisabled }) {
   const classes = useStyles();
   const [value, setValue] = useState(null);
 
@@ -30,8 +30,6 @@ export default function FilterDropdown({ handleFilterQueryChange, filterName, va
   return (
     <div>
       {/* States are defined in our filterConstants.js file */}
-      {/* TODO add disabled prop */}
-      {/*  disabled={isDisabled} */}
       <FormControl className={classes.formControl}>
         <Autocomplete
           id={elementId}
@@ -41,6 +39,7 @@ export default function FilterDropdown({ handleFilterQueryChange, filterName, va
           autoComplete={true}
           getOptionLabel={option => option}
           renderInput={params => <TextField {...params} label={label} variant="outlined" />}
+          disabled={isDisabled}
           onChange={(e, newValue) => handleFilter(e, newValue)}
         />
       </FormControl>

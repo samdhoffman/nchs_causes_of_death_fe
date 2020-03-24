@@ -148,6 +148,7 @@ function App() {
             valueOpts={STATES}
             elementId={"state-select"}
             label={"Select State or United States"}
+            isDisabled={isError}
           />
           {/* Cause Dropdown */}
           <FilterDropdown 
@@ -156,6 +157,7 @@ function App() {
             valueOpts={CAUSES}
             elementId={"cause-select"}
             label={"Select Cause Name"}
+            isDisabled={isError}
           />
         </Grid>
 
