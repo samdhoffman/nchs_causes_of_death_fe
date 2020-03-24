@@ -1,7 +1,7 @@
 import React from "react"
 import { makeStyles } from '@material-ui/core/styles';
-// import Footer from "./Footer";
-// import Navbar from "./Navbar";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const useStyles = makeStyles({
   Layout: {
@@ -23,11 +23,11 @@ const Layout = (props) => {
   
   return (
     <div className={classes.Layout}>
-      {/* <Navbar /> */}
+      <Navbar />
       <main className="content">
         {props.children}
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }
