@@ -4,9 +4,15 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+// THEME
+import { ThemeProvider } from '@material-ui/core/styles';
+import muiTheme from './components/theme/muiTheme';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={muiTheme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
