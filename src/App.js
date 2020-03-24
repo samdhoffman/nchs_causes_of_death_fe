@@ -8,10 +8,10 @@ import axios from 'axios';
 import Layout from './components/layout/Layout';
 import DataTable from './components/DataTable';
 import FilterDropdown from './components/FilterDropdown';
+import ErrorPage from './components/ErrorPage';
 
 import { STATES } from './constants/filterConstants';
 import { CAUSES } from './constants/filterConstants';
-import ErrorPage from './components/ErrorPage';
 
 const useStyles = makeStyles(theme => ({
   dropdownSection: {
