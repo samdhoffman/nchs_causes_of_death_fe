@@ -5,6 +5,7 @@ import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DataTable from './components/DataTable';
 import StateSelect from './components/StateSelect';
+import CauseSelect from './components/CauseSelect';
 
 function App() {
   // Cause of death data set from api
@@ -20,6 +21,7 @@ function App() {
   });
   const [sortQuery, setSortQuery] = useState("")
   const [filterQuery, setFilterQuery] = useState("")
+  const [filterQueryDict, setFilterQueryDict] = useState({})
 
   // Loading & Errors
   const [isLoading, setIsLoading] = useState(false); // used for loading indicator
@@ -68,13 +70,37 @@ function App() {
     setSortValues(newSortValues);
   }
 
-  const handleFilterQueryChange = (newQuery) => {
-    setFilterQuery(newQuery);
+  const handleFilterQueryChange = (newQuery, filterKey) => {
+    let filterQueryDictCopy = {...filterQueryDict};
+
+    // Update the dictionary keeping track of our filters and their values
+    if (newQuery.length > 0) {
+      filterQueryDictCopy[filterKey] = newQuery;
+    } else {
+      delete filterQueryDictCopy[filterKey]
+    }
+
+    setFilterQueryDict(filterQueryDictCopy);
+
+    // Using a copy of the filterQueryDict as state updates can be asynchronous
+    if (Object.keys(filterQueryDictCopy).length == 0) {
+      setFilterQuery("");
+    } else {
+      let queries = [];
+      for (let [key, value] of Object.entries(filterQueryDictCopy)) {
+        let cur = key + "=" + value;
+        queries.push(cur);
+      }
+
+      let queryString = queries.join("&");
+      setFilterQuery(queryString);
+    }
   }
 
   return (
     <div className="App">
       <StateSelect handleFilterQueryChange={handleFilterQueryChange}/>
+      <CauseSelect handleFilterQueryChange={handleFilterQueryChange}/>
       {isError && <div>Something went wrong ...</div>}
 
       {isLoading ? (

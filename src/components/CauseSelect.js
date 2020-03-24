@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { STATES } from '../constants/filterConstants';
+import { CAUSES } from '../constants/filterConstants';
 
-export default function StateSelect({ handleFilterQueryChange }) {
+export default function CauseSelect({ handleFilterQueryChange }) {
   const [value, setValue] = useState(null);
 
   const handleFilter = (event, newValue) => {
@@ -11,9 +11,9 @@ export default function StateSelect({ handleFilterQueryChange }) {
 
     if (newValue) {
       // Will use newValue in the query string for filtering
-      handleFilterQueryChange(newValue, "State");
+      handleFilterQueryChange(newValue, "Cause Name");
     } else {
-      handleFilterQueryChange("", "State")
+      handleFilterQueryChange("", "Cause Name")
     }
     
     setValue(newValue);
@@ -21,15 +21,15 @@ export default function StateSelect({ handleFilterQueryChange }) {
 
   return (
     <div>
-      {/* States are defined in our filterConstants.js file */}
+      {/* Causes are defined in our filterConstants.js file */}
       <Autocomplete
         id="state-select"
         style={{ width: 300, margin: 20 }}
-        options={STATES}
+        options={CAUSES}
         autoHighlight
         autoComplete={true}
         getOptionLabel={option => option}
-        renderInput={params => <TextField {...params} label="Select State or United States" variant="outlined" />}
+        renderInput={params => <TextField {...params} label="Select Cause Name" variant="outlined" />}
         onChange={(e, newValue) => handleFilter(e, newValue)}
       />
     </div>
