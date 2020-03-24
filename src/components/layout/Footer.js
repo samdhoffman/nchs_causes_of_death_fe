@@ -9,13 +9,14 @@ const useStyles = makeStyles(theme => ({
   Footer: {
     textAlign: "center",
     flexShrink: 0,
-    background: "rgba(0, 0, 0, 1)",
     color: "white",
+    background: "#002e56"
   },
   author: {
     ...theme.typography.subtitle1,
     display: "flex",
     justifyContent: "center",
+    fontWeight: "bold",
   },
   footerBtn: {
     border: "none",

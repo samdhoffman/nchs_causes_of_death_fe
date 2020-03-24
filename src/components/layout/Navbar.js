@@ -20,9 +20,6 @@ const useStyles = makeStyles({
   title: {
     flexGrow: 1
   },
-  btn: {
-    color: "#f8981d",
-  },
   githubLink: {
     textDecoration: "none",
     '&:visited': {
