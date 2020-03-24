@@ -108,7 +108,7 @@ export default function DataTable({ causeOfDeathData, columns, sortValues, curSo
                     component={i === 0 ? "th" : ""} 
                     scope={i === 0 ? "row" : ""} 
                     align="right"
-                    key={cellData}
+                    key={`${i}_${cellData}`}
                   >
                     {cellData}
                   </TableCell>
