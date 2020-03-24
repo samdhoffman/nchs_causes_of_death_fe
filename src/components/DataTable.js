@@ -77,6 +77,7 @@ export default function DataTable({ causeOfDeathData, columns, sortValues, curSo
                   active={true}
                   direction={sortValues[col]}
                   onClick={() => handleSort(col, sortValues[col])}
+                  style={{color: "#003d71"}}
                 >
                   {col}
                 </TableSortLabel>
