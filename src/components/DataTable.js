@@ -8,14 +8,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
   table: {
+    minHeight: 600,
     minWidth: 750,
   },
 }));
 
-export default function DataTable({ causeOfDeathData, columns, sortValues, curSortQuery, handleSortQueryChange }) {
+export default function DataTable({ causeOfDeathData, columns, sortValues, curSortQuery, handleSortQueryChange, isLoading }) {
   const classes = useStyles();
 
   const handleSort = (column, direction) => {
@@ -83,24 +85,34 @@ export default function DataTable({ causeOfDeathData, columns, sortValues, curSo
             </TableRow>
           </TableHead>
 
-          <TableBody>
-            {causeOfDeathData.data && causeOfDeathData.data.map((rowData, index) => (
-              <TableRow name={index} key={index}>
-                {rowData.map((cellData, i) => (
-                  // For accessibility, the first column is set to be a <th> element, with a scope of "row". 
-                  // This enables screen readers to identify a cell's value by it's row and column name.
-                  <TableCell 
-                    component={i === 0 ? "th" : ""} 
-                    scope={i === 0 ? "row" : ""} 
-                    align="right"
-                    key={cellData}
-                  >
-                    {cellData}
-                  </TableCell>
-                ))}
+          {isLoading ? (
+            <TableBody>
+              <TableRow>
+                <TableCell align="center" colSpan={12}>
+                  <CircularProgress />
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+            </TableBody>
+          ) : (
+            <TableBody>
+              {causeOfDeathData.data && causeOfDeathData.data.map((rowData, index) => (
+                <TableRow name={index} key={index}>
+                  {rowData.map((cellData, i) => (
+                    // For accessibility, the first column is set to be a <th> element, with a scope of "row". 
+                    // This enables screen readers to identify a cell's value by it's row and column name.
+                    <TableCell 
+                      component={i === 0 ? "th" : ""} 
+                      scope={i === 0 ? "row" : ""} 
+                      align="right"
+                      key={cellData}
+                    >
+                      {cellData}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
 
         </Table>
       </TableContainer>

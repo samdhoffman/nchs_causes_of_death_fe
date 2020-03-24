@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import DataTable from './components/DataTable';
 import FilterDropdown from './components/FilterDropdown';
 
@@ -117,18 +116,15 @@ function App() {
       />
 
       {isError && <div>Something went wrong ...</div>}
-
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <DataTable 
-          causeOfDeathData={causeOfDeathData} 
-          columns={columns}
-          sortValues={sortValues} 
-          curSortQuery={sortQuery}
-          handleSortQueryChange={handleSortQueryChange}
-        />
-      )}
+      
+      <DataTable 
+        causeOfDeathData={causeOfDeathData} 
+        columns={columns}
+        sortValues={sortValues} 
+        curSortQuery={sortQuery}
+        handleSortQueryChange={handleSortQueryChange}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
