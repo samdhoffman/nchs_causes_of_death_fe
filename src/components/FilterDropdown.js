@@ -29,7 +29,7 @@ export default function FilterDropdown({ handleFilterQueryChange, filterName, va
 
   return (
     <div>
-      {/* States are defined in our filterConstants.js file */}
+      {/* States and Causes are defined in our filterConstants.js file and passed as props to this file*/}
       <FormControl className={classes.formControl}>
         <Autocomplete
           id={elementId}
